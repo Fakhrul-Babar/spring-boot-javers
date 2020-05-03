@@ -57,7 +57,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/snapshots")
-    public String getPersonSnapshots() {
+    public String getEmployeeSnapshots() {
         QueryBuilder jqlQuery = QueryBuilder.byClass(Employee.class);
 
         List<CdoSnapshot> changes = new ArrayList(javers.findSnapshots(jqlQuery.build()));
@@ -70,7 +70,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/{localId}/snapshots")
-    public String getPersonSnapshots(@PathVariable String localId) {
+    public String getEmployeeSnapshots(@PathVariable String localId) {
         QueryBuilder jqlQuery = QueryBuilder.byInstanceId(localId, Employee.class);
 
         List<CdoSnapshot> changes = javers.findSnapshots(jqlQuery.build());
@@ -83,7 +83,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/{previousId}/diff/{currentId}")
-    public String getPersonSnapshots(@PathVariable Long previousId, @PathVariable Long currentId) {
+    public String getEmployeeSnapshots(@PathVariable Long previousId, @PathVariable Long currentId) {
         Employee oldObj = employeeService.findEmployee(previousId);
         Employee newObj = employeeService.findEmployee(currentId);
 
