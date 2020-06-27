@@ -21,6 +21,8 @@ public class Employee implements Serializable {
 
     private String firstName;
     private String lastName;
+
+    @Enumerated(EnumType.STRING)
     private Gender sex;
     private Long salary;
 

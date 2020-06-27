@@ -56,10 +56,20 @@ public class EmployeeController {
         return javers.getJsonConverter().toJson(changes);
     }
 
+
+    @GetMapping("/{localId}/changes")
+    public String getEmployeeChange(@PathVariable String localId) {
+        QueryBuilder jqlQuery = QueryBuilder.byInstanceId(localId, Employee.class);
+
+        List<Change> changes = javers.findChanges(jqlQuery.build());
+
+        return javers.getJsonConverter().toJson(changes);
+    }
+
     @GetMapping("/snapshots")
     public String getEmployeeSnapshots() {
-        QueryBuilder jqlQuery = QueryBuilder.byClass(Employee.class);
-
+        QueryBuilder jqlQuery = QueryBuilder.byClass(Employee.class).withCommitProperty("id", "1");
+//        javers.findSnapshots(QueryBuilder.byClass(Employee.class).build())
         List<CdoSnapshot> changes = new ArrayList(javers.findSnapshots(jqlQuery.build()));
 
         changes.sort((o1, o2) -> -1 * o1.getCommitMetadata().getCommitDate().compareTo(o2.getCommitMetadata().getCommitDate()));
@@ -72,6 +82,19 @@ public class EmployeeController {
     @GetMapping("/{localId}/snapshots")
     public String getEmployeeSnapshots(@PathVariable String localId) {
         QueryBuilder jqlQuery = QueryBuilder.byInstanceId(localId, Employee.class);
+
+        List<CdoSnapshot> changes = javers.findSnapshots(jqlQuery.build());
+
+        changes.sort((o1, o2) -> -1 * o1.getCommitMetadata().getCommitDate().compareTo(o2.getCommitMetadata().getCommitDate()));
+
+        JsonConverter jsonConverter = javers.getJsonConverter();
+
+        return jsonConverter.toJson(changes);
+    }
+
+    @GetMapping("/{localId}/{property}/snapshots")
+    public String getEmployeeSnapshots2(@PathVariable String localId, @PathVariable String property) {
+        QueryBuilder jqlQuery = QueryBuilder.byValueObjectId(localId, Employee.class, property);
 
         List<CdoSnapshot> changes = javers.findSnapshots(jqlQuery.build());
 
