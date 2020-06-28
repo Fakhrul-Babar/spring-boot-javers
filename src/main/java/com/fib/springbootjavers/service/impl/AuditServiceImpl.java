@@ -39,11 +39,9 @@ public class AuditServiceImpl implements AuditService {
         QueryBuilder queryBuilder = QueryBuilder.anyDomainObject();
 
         if(parameters != null){
-            for (Map.Entry<String, String> entry: parameters.entrySet()){
-                if(entry.getValue() != null){
-                    queryBuilder.withCommitProperty(entry.getKey(), String.valueOf(entry.getValue()));
-                }
-            }
+            parameters.forEach((key, value) -> {
+                if(value != null) queryBuilder.withCommitProperty(key, String.valueOf(value));
+            });
         }
         return queryBuilder;
     }
